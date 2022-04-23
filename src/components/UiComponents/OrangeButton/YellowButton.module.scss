@@ -1,0 +1,42 @@
+@import "src/scss/variables";
+
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.text {
+  top: -1px;
+  bottom: auto;
+  right: 128%;
+}
+
+.wrapper .text {
+  visibility: hidden;
+  position: absolute;
+  width: 120px;
+  background-color: $gray;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.text::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent $gray;
+}
+
+.wrapper:hover .text {
+  visibility: visible;
+  opacity: 1;
+}

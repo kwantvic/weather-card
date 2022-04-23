@@ -1,0 +1,30 @@
+@import "src/scss/mixins";
+@import "src/scss/variables";
+
+.wrapper {
+  width: 290px;
+  height: 230px;
+  position: relative;
+  margin: 5px;
+
+  .icons {
+    position: absolute;
+    right: 10px;
+    bottom: 25px;
+
+    .icon {
+      width: 25px;
+      height: 25px;
+      background-color: white;
+      border-radius: 5px;
+      color: $grayIcon;
+      margin: 0 auto;
+
+      &:hover {
+        color: white;
+        background-color: $orangeBtn;
+        transition: background-color .5s, color .5s;
+      }
+    }
+  }
+}

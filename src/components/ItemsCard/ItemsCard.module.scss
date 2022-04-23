@@ -1,0 +1,18 @@
+@import "../../../scss/mixins";
+@import "../../../scss/variables";
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 30px 5px;
+
+  .alert {
+    width: 80%;
+  }
+
+  .progress {
+    margin-top: 30px;
+  }
+}
