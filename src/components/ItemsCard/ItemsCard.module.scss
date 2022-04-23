@@ -1,5 +1,5 @@
-@import "../../../scss/mixins";
-@import "../../../scss/variables";
+@import "../../scss/mixins";
+@import "../../scss/variables";
 
 .wrapper {
   display: flex;
@@ -13,6 +13,11 @@
   }
 
   .progress {
+    color: $orange;
+  }
+
+  .btnMain {
+    width: 100%;
     margin-top: 30px;
   }
 }

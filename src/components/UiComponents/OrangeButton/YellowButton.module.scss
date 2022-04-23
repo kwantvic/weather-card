@@ -1,42 +1,39 @@
 @import "src/scss/variables";
+@import "src/scss/mixins";
 
 .wrapper {
-  position: relative;
-  display: inline-block;
-}
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .btn {
+    background-color: $orangeBtn;
+    border-color: $orangeBtnBorder;
+    padding-left: 10px;
+    padding-right: 15px;
+  }
 
-.text {
-  top: -1px;
-  bottom: auto;
-  right: 128%;
-}
+  button {
+    height: 45px;
+    display: flex;
+    align-items: center;
+    border-radius: 45px;
+    color: white;
+    border: 1px solid transparent;
+    font-size: rem(14);
+    cursor: pointer;
 
-.wrapper .text {
-  visibility: hidden;
-  position: absolute;
-  width: 120px;
-  background-color: $gray;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
+    span {
+      transform: scale(0.8);
+      color: white;
+    }
 
-.text::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent transparent $gray;
-}
+    &:hover {
+      background-color: #9e6c6c;
+      transition: background-color .5s;
+    }
 
-.wrapper:hover .text {
-  visibility: visible;
-  opacity: 1;
+    &:active {
+      background-color: #ead1d1;
+    }
+  }
 }

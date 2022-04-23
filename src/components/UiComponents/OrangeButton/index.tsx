@@ -1,17 +1,20 @@
 import React from 'react';
 
-import styles from "./ToolTip.module.scss";
+import styles from "./YellowButton.module.scss";
 
-interface ToolTipProps {
+interface YellowButtonProps {
     text: string,
-    icon: React.ReactNode
+    icon?: React.ReactNode,
+    onClick?: (e: React.MouseEvent) => void;
 }
 
-export const ToolTip: React.FC<ToolTipProps> = React.memo(({text, icon}) => {
+export const OrangeButton: React.FC<YellowButtonProps> = React.memo(({text, icon, onClick}) => {
     return (
-        <div className={styles.wrapper}>
-            {icon}
-            <span className={styles.text}>{text}</span>
+        <div onClick={onClick && onClick} className={styles.wrapper}>
+            <button className={`${styles.btn}`}>
+                {icon && <span>{icon}</span>}
+                {text}
+            </button>
         </div>
     );
 })

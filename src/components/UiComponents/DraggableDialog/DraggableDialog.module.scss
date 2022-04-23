@@ -1,19 +1,22 @@
 @import "src/scss/mixins";
 
-.wrapper * {
-  font-family: 'Inter-SemiBold', Roboto, system-ui, Tahoma, sans-serif;
-  font-size: 20px;
-}
-
 .wrapper {
   .icon {
     cursor: pointer;
   }
 
+  .title {
+    font-size: rem(14);
+  }
+
   .btn {
+    display: flex;
+    justify-content: end;
     button {
-      width: 50px;
-      height: 45px;
+      display: flex;
+      width: rem(70);
+      justify-content: center;
+      padding: 0;
     }
   }
 }

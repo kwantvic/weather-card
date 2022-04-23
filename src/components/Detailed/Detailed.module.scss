@@ -2,83 +2,112 @@
 @import "src/scss/variables";
 
 .wrapper {
-  width: 100vw;
+  margin: 30px;
+  display: flex;
+  flex-direction: column;
 
-  .header {
-    height: 70px;
-    background-color: #48484a;
-    display: flex;
-    align-items: center;
-    padding-left: rem(30);
+  .infoWrapper {
+    justify-content: center;
 
-    .icon {
-      transform: scale(1.8);
-      margin: 0 10px;
+    .info {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+
+      .leftInfo {
+        padding-right: rem(30);
+
+        .data {
+          color: $orange;
+        }
+
+        .city {
+          font-size: rem(24);
+          font-weight: bold;
+        }
+
+        .temp {
+          display: flex;
+          align-items: center;
+
+          img {
+            width: rem(100);
+            height: rem(100);
+          }
+
+          p {
+            font-size: rem(40);
+            font-weight: bold;
+          }
+        }
+
+        .desc {
+          font-weight: bold;
+
+          span {
+            text-transform: capitalize;
+          }
+        }
+      }
+
+      .rightInfo {
+        .cardInfo {
+          width: content-box;
+          border: 1px solid $grayIcon;
+          border-radius: 5px;
+          padding: 5px;
+
+          div {
+            padding-bottom: 1px;
+
+            span {
+              color: $orangeBtnBorder;
+            }
+          }
+        }
+      }
     }
 
-    span {
-      color: white;
-      font-size: rem(30);
-      cursor: pointer;
+    .hourlyWrapper, .hourlyFooter {
+      display: flex;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+
+    .hourlyWrapper {
+      align-items: flex-end;
+      height: 100px;
+      background-color: $grayIcon;
+
+      .hour {
+        flex: 1;
+        height: 20px;
+        text-align: center;
+        background-color: $orange;
+        color: white;
+      }
+    }
+
+    .hourlyFooter {
+      .time {
+        flex: 1;
+        font-size: rem(11);
+      }
     }
   }
 
-  .search {
-    background-color: $orange;
-    height: 70px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .titleHourly, .time {
+    text-align: center;
+    color: $gray;
+    border: 1px solid $grayIcon;
+  }
 
-    .form {
-      display: flex;
+  .progress {
+    margin: 0 auto;
+    color: $orange;
+  }
 
-      .input, .btn {
-        height: 45px;
-      }
-
-      input {
-        font-size: rem(18);
-        width: 250px;
-        padding: 12px 24px;
-        border-radius: 45px 0 0 45px;
-        border: 0 none;
-        box-shadow: none;
-      }
-
-      .btn {
-        padding-left: 10px;
-        padding-right: 15px;
-      }
-
-      .btnColor {
-        background-color: $orangeBtn;
-        border-color: $orangeBtnBorder;
-      }
-
-      button {
-        display: flex;
-        align-items: center;
-        border-radius: 0 45px 45px 0;
-        color: white;
-        border: 1px solid transparent;
-        font-size: rem(14);
-        cursor: pointer;
-
-        .iconSearch {
-          transform: scale(0.8);
-        }
-
-        &:hover {
-          background-color: #9e6c6c;
-          transition: background-color .5s;
-        }
-
-        &:active {
-          background-color: #ead1d1;
-        }
-      }
-    }
+  .btn {
+    margin-top: 30px;
   }
 }

@@ -1,34 +1,17 @@
-import * as React from 'react';
-import Alert from '@mui/material/Alert';
-import {useDispatch} from "react-redux";
-import {AlertTitle} from "@mui/material";
+import React from 'react';
 
-import styles from "./ActionAlerts.module.scss";
-import {resetError} from "../../../redux/getCitySlice";
+import styles from "./ToolTip.module.scss";
 
-type ActionAlertsProps = {
-    severity: "error" | "warning" | "info" | "success";
-    errorDescription: string;
+interface ToolTipProps {
+    text: string,
+    icon: React.ReactNode
 }
 
-export const ActionAlerts: React.FC<ActionAlertsProps> = React.memo(({severity, errorDescription}) => {
-    const [isError, setIsError] = React.useState(false);
-    const dispatch = useDispatch();
-    React.useEffect(() => {
-        if (errorDescription.length) {
-            setIsError(true);
-            setTimeout(() => {
-                setIsError(false);
-                dispatch((resetError("")));
-            }, 3333)
-        }
-    }, [errorDescription, dispatch])
+export const ToolTip: React.FC<ToolTipProps> = React.memo(({text, icon}) => {
     return (
-        <div className={`${styles.wrapper} ${isError && styles.wrapper__visibly}`}>
-            <Alert severity={severity}>
-                <AlertTitle className={styles.error} style={{textTransform: "capitalize"}}>{severity}</AlertTitle>
-                <span>{errorDescription} 🥺</span>
-            </Alert>
+        <div className={styles.wrapper}>
+            {icon}
+            <span className={styles.text}>{text}</span>
         </div>
     );
 })

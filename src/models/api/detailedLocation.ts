@@ -1,31 +1,23 @@
-export interface ListLocationModel {
-    list: FindLocationModel[]
+export interface DetailedLocationModel {
+    hourly: DetailedHourlyModel[],
+    timezone: string,
+    current: DetailedCurrentModel
+
 }
 
-export interface FindLocationModel {
-    id: number,
-    name: string,
-    sys: FindLocationSysModel,
-    main: FindLocationMainModel,
-    weather: FindLocationWeatherModel[],
-    coord: FindLocationCoordModel
-}
-
-interface FindLocationSysModel {
-    country: string
-}
-
-interface FindLocationMainModel {
+interface DetailedHourlyModel {
     temp: number
 }
 
-interface FindLocationWeatherModel {
-    icon: string,
-    description: string
-}
-
-interface FindLocationCoordModel {
-    lat: number,
-    lon: number
+interface DetailedCurrentModel {
+    uvi: number,
+    visibility: number,
+    wind_speed: number,
+    wind_deg: number,
+    feels_like: number,
+    pressure: number,
+    sunrise: number,
+    sunset: number,
+    humidity: number
 }
 

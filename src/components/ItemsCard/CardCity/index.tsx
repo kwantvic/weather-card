@@ -1,97 +1,106 @@
-import React from 'react';
-import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
-import {countryCodeEmoji} from 'country-code-emoji';
-import CachedIcon from '@mui/icons-material/Cached';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import {useDispatch} from 'react-redux';
+import React from "react";
+import {Card, CardActionArea, CardContent, CircularProgress, Typography} from "@mui/material";
+import {countryCodeEmoji} from "country-code-emoji";
+import CachedIcon from "@mui/icons-material/Cached";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import {useDispatch} from "react-redux";
 
-import styles from './CardCity.module.scss';
-import {ToolTip} from "../ToolTip"
-import {useLocation} from "react-router-dom";
-import {useFavSelector} from "../../../redux/selectors";
-import {addFav, delFav} from "../../../redux/favCitySlice";
+import styles from "./CardCity.module.scss";
+import {ToolTip} from "../../UiComponents/ToolTip"
+import {useLocation, useNavigate} from "react-router-dom";
+import {useFavIdSelector, useLoadingUpdateSelector, useUpdateCityIdSelector} from "../../../redux/selectors";
+import {addFavCity, addFavId, changeUpdateCityId, delFavId, fetchUpdateCity} from "../../../redux/favCitySlice";
 import {getLocalFav, setLocalFav} from "../../../utils/functional";
-
-export interface FindCityState {
-    id?: number,
-    name?: string,
-    country?: string,
-    temp?: number,
-    weathIcon?: string,
-    weathDescr?: string
-}
+import DraggableDialog from "../../UiComponents/DraggableDialog";
+import {CityStateModel} from "../../../models/redux/findCity";
 
 interface CardCityProps {
-    city: FindCityState
+    city: CityStateModel
 }
 
 export const CardCity: React.FC<CardCityProps> = React.memo(({city}) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const isFindPath = useLocation().pathname.includes("/find/");
-    const fav = useFavSelector();
-    console.log("🧲", fav)
+    const favById = useFavIdSelector();
+    const updateCityId = useUpdateCityIdSelector();
 
     function clickCard() {
-        console.log("🧲click card")
+        navigate(`/detailed/${city.id}`);
     }
 
-    function onDelFav(id: number) {
-        dispatch(delFav(id));
+    function onDelFav() {
+        dispatch(delFavId(city.id));
         if (getLocalFav()) {
             let arr: number[] = JSON.parse(getLocalFav()!);
-            (arr.length > 0) && setLocalFav(arr.filter(x => x !== id));
+            (arr.length > 0) && setLocalFav(arr.filter(x => x !== city.id));
         } else {
             setLocalFav([]);
         }
     }
 
-    function onAddFav(id: number) {
-        dispatch(addFav(id));
+    function onAddFav(e: React.MouseEvent) {
+        e.stopPropagation();
+        dispatch(addFavId(city.id));
+        dispatch(addFavCity(city));
         if (getLocalFav()) {
             let arr: number[] = JSON.parse(getLocalFav()!);
-            arr.push(id)
+            arr.push(city.id);
             setLocalFav(arr);
         } else {
-            setLocalFav([id])
+            setLocalFav([city.id]);
         }
     }
 
-    function clickIcon(e: React.MouseEvent) {
-        city.id && (fav.includes(city.id) ? onDelFav(city.id) : onAddFav(city.id));
+    function updateCity(e: React.MouseEvent) {
         e.stopPropagation();
+        dispatch(changeUpdateCityId(city.id));
+        dispatch(fetchUpdateCity(city.id));
     }
 
     return (
-        <Card className={styles.wrapper} onClick={clickCard}>
-            <CardActionArea>
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {city.name} {city.country && countryCodeEmoji(city.country)}
-                    </Typography>
-                    <Typography variant="h1" color="secondary">
-                        {city.temp ? Math.round(city.temp) : `--`}°<img alt="icon"
-                                                                        src={`https://openweathermap.org/img/w/${city.weathIcon}.png`}
-                                                                        width="120" height="100"/>
-                    </Typography>
-                    <Typography color="text.disabled" gutterBottom variant="h6" component="div">
-                        {city.weathDescr}
-                    </Typography>
-                    <div className={styles.icons}>
-                        <div className={styles.icon} onClick={clickIcon}>
-                            {city.id &&
-                                (!fav.includes(city.id)
-                                    ? <ToolTip text={"Bookmark it"} icon={<FavoriteBorderIcon/>}/>
-                                    : <ToolTip text={"Remove"} icon={<FavoriteIcon/>}/>)
+        <div data-testid="card-city" className={styles.wrapper}>
+            {(useLoadingUpdateSelector() === 1 && updateCityId === city.id) &&
+                <div className={styles.wrapperProgress}>
+                    <CircularProgress className={styles.progress}/>
+                </div>}
+            <Card
+                className={(useLoadingUpdateSelector() === 1 && updateCityId === city.id) ? `${styles.wrapperCard} ${styles.load}` : `${styles.wrapperCard}`}
+                onClick={clickCard}>
+                <CardActionArea>
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {city.name} {city.country && countryCodeEmoji(city.country)}
+                        </Typography>
+                        <Typography variant="h1" color="secondary">
+                            {city.temp ? Math.round(city.temp) : `--`}°<img className={styles.img} alt="icon"
+                                                                            src={`https://openweathermap.org/img/w/${city.weathIcon}.png`}/>
+                        </Typography>
+                        <Typography color="text.disabled" gutterBottom variant="h6" component="div">
+                            {city.weathDescr}
+                        </Typography>
+                        <div className={styles.icons}>
+                            {!favById.includes(city.id) &&
+                                <div onClick={onAddFav} className={styles.icon}>
+                                    <ToolTip text={"Bookmark it"} icon={<FavoriteBorderIcon/>}/>
+                                </div>
                             }
+                            {favById.includes(city.id) &&
+                                <DraggableDialog title={"Do you really want to remove a city card from a favorites?"}
+                                                 onAction={onDelFav} component={
+                                    <div className={styles.icon}>
+                                        <ToolTip text={"Remove"} icon={<FavoriteIcon/>}/>
+                                    </div>}
+                                />
+                            }
+                            {!isFindPath &&
+                                <div onClick={updateCity} className={styles.icon}>
+                                    <ToolTip text={"Update the data"} icon={<CachedIcon/>}/>
+                                </div>}
                         </div>
-                        {!isFindPath &&
-                            <div className={styles.icon}>
-                                <ToolTip text={"Update the data"} icon={<CachedIcon/>}/>
-                            </div>}
-                    </div>
-                </CardContent>
-            </CardActionArea>
-        </Card>
+                    </CardContent>
+                </CardActionArea>
+            </Card></div>
     );
 })

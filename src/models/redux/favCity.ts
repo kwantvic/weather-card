@@ -1,19 +1,11 @@
-import {LoadingStatus} from "../LoadingStatus";
+import {LoadingStatus} from "./LoadingStatus";
+import {CityStateModel} from "./findCity";
 
-export interface CityStateModel {
-    id: number,
-    name: string,
-    country: string,
-    temp: number,
-    weathIcon: string,
-    weathDescr: string,
-    lat: number,
-    lon: number
-}
-
-export interface FindCityStateModel {
-    errorDescription: string,
+export interface FavCityStateModel {
+    arrIdFav: number[],
     loading: LoadingStatus,
-    findCity: CityStateModel[],
-    searchValue: string
+    loadingUpdateCity: LoadingStatus,
+    favCity: CityStateModel[],
+    errorDescription: string,
+    updateCityId: number
 }

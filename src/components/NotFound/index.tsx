@@ -1,34 +1,22 @@
-import React from 'react';
-import Alert from '@mui/material/Alert';
-import {useDispatch} from "react-redux";
-import {AlertTitle} from "@mui/material";
+import React from "react";
+import Alert from "@mui/material/Alert";
+import {useNavigate} from "react-router-dom";
 
-import styles from "./ActionAlerts.module.scss";
-import {resetError} from "../../../redux/findCitySlice";
+import styles from "./NotFound.module.scss";
+import HomeIcon from "@mui/icons-material/Home";
+import {OrangeButton} from "../UiComponents/OrangeButton";
 
-type ActionAlertsProps = {
-    severity: "error" | "warning" | "info" | "success";
-    errorDescription: string;
-}
+export const NotFound: React.FC = () => {
+    const navigate = useNavigate();
 
-export const ActionAlerts: React.FC<ActionAlertsProps> = React.memo(({severity, errorDescription}) => {
-    const [isError, setIsError] = React.useState(false);
-    const dispatch = useDispatch();
-    React.useEffect(() => {
-        if (errorDescription.length) {
-            setIsError(true);
-            setTimeout(() => {
-                setIsError(false);
-                dispatch((resetError("")));
-            }, 3333)
-        }
-    }, [errorDescription, dispatch])
+    function toMain() {
+        navigate("/");
+    }
+
     return (
-        <div className={`${styles.wrapper} ${isError && styles.wrapper__visibly}`}>
-            <Alert severity={severity}>
-                <AlertTitle className={styles.error} style={{textTransform: "capitalize"}}>{severity}</AlertTitle>
-                <span>{errorDescription} 🥺</span>
-            </Alert>
+        <div className={styles.wrapper}>
+            <Alert className={styles.alert} severity="warning">Page not found.</Alert>
+            <OrangeButton text={"Return to homepage"} icon={<HomeIcon/>} onClick={toMain}/>
         </div>
     );
-})
+};

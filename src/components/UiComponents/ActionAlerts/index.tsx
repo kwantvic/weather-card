@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import Alert from '@mui/material/Alert';
 import {useDispatch} from "react-redux";
 import {AlertTitle} from "@mui/material";
 
 import styles from "./ActionAlerts.module.scss";
-import {resetError} from "../../../redux/imgSlice";
+import {resetError} from "../../../redux/findCitySlice";
 
 type ActionAlertsProps = {
     severity: "error" | "warning" | "info" | "success";
@@ -27,7 +27,7 @@ export const ActionAlerts: React.FC<ActionAlertsProps> = React.memo(({severity, 
         <div className={`${styles.wrapper} ${isError && styles.wrapper__visibly}`}>
             <Alert severity={severity}>
                 <AlertTitle className={styles.error} style={{textTransform: "capitalize"}}>{severity}</AlertTitle>
-                <span>{errorDescription}🥺</span>
+                <span>{errorDescription} 🥺</span>
             </Alert>
         </div>
     );

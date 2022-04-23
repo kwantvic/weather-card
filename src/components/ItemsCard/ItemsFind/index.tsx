@@ -1,52 +1,55 @@
-import React from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import React from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 import {Alert, CircularProgress} from "@mui/material";
 
-import styles from './ItemsFind.module.scss';
-import {CardCity} from "../components/uiComponents/CardCity";
-import {CityState, fetchGetCity, resetFind} from "../redux/getCitySlice";
-import {useFindCitySelector, useLoadingFindSelector} from "../redux/selectors";
-import {YellowButton} from "../components/uiComponents/OrangeButton";
-import {addFav} from "../redux/favCitySlice";
+import styles from "../ItemsCard.module.scss";
+import {CardCity} from "../CardCity";
+import {changeNameCity, changeSearchValue, fetchGetCity} from "../../../redux/findCitySlice";
+import {useFindCitySelector, useLoadingFindSelector, useNameCitySelector} from "../../../redux/selectors";
+import {OrangeButton} from "../../UiComponents/OrangeButton";
+import {CityStateModel} from "../../../models/redux/findCity";
 
-export const FindLocation: React.FC = () => {
+export const ItemsFind: React.FC = React.memo(() => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const {location} = useParams();
     const city = useFindCitySelector();
+    const nameCity = useNameCitySelector();
     const loadingFind = useLoadingFindSelector();
 
     React.useEffect(() => {
-        if (localStorage.getItem("arrFavCity")) {
-            let arr: number[] = JSON.parse(localStorage.getItem("arrFavCity")!);
-            (arr.length > 0) && dispatch(addFav(arr));
-        } else {
-            let arr: number[] = [];
-            localStorage.setItem("arrFavCity", JSON.stringify(arr));
+        if (location) {
+            dispatch(changeSearchValue(location));
+            dispatch(changeNameCity(location));
         }
-    }, [dispatch])
-
-    React.useEffect(() => {
-        location && dispatch(fetchGetCity(location))
     }, [location, dispatch]);
 
+    React.useEffect(() => {
+        if (location) {
+            if (location !== nameCity) {
+                dispatch(fetchGetCity(location));
+            }
+        }
+    }, [location, nameCity, dispatch])
+
     function toMain() {
-        dispatch(resetFind());
         navigate("/");
     }
 
     return (
-        <div className={styles.wrapper}>
+        <div data-testid="find" className={styles.wrapper}>
             {loadingFind === 1 && <CircularProgress className={styles.progress} color="secondary"/>}
             {city.length
-                ? (loadingFind === 2) && city.map((obj: CityState) => {
-                        return <CardCity key={obj.id} city={obj}/>
-                    })
-                : (loadingFind === 2 || loadingFind === 3) && <Alert className={styles.alert} severity="error">Location not found</Alert>
+                ? (loadingFind === 2 || loadingFind === 0) && city.map((obj: CityStateModel) => {
+                return <CardCity key={obj.id} city={obj}/>
+            })
+                : (loadingFind === 2 || loadingFind === 3) &&
+                <Alert className={styles.alert} severity="error">Location not found</Alert>
             }
-            <YellowButton text={"Return to homepage"} icon={<HomeIcon/>} onClick={toMain}/>
+            <div className={styles.btnMain}><OrangeButton text={"Return to homepage"} icon={<HomeIcon/>}
+                                                          onClick={toMain}/></div>
         </div>
     );
-}
+})

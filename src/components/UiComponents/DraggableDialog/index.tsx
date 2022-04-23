@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogTitle from '@mui/material/DialogTitle';
-import YellowButton from "../YellowButton";
 
 import styles from "./DraggableDialog.module.scss";
+import {OrangeButton} from "../OrangeButton";
+import DialogContentText from '@mui/material/DialogContentText';
+import {DialogContent} from "@mui/material";
 
 type DraggableDialogProps = {
     title: string;
@@ -15,13 +16,20 @@ type DraggableDialogProps = {
 const DraggableDialog: React.FC<DraggableDialogProps> = ({title, onAction, component}) => {
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setOpen(true);
     };
 
-    const handleClose = () => {
+    const handleClose = (e: React.MouseEvent) => {
         setOpen(false);
+        e.stopPropagation();
     };
+
+    function onConsent(e: React.MouseEvent) {
+        onAction();
+        handleClose(e);
+    }
 
     return (
         <div className={styles.wrapper}>
@@ -32,12 +40,14 @@ const DraggableDialog: React.FC<DraggableDialogProps> = ({title, onAction, compo
                 onClose={handleClose}
                 aria-labelledby="draggable-dialog-title"
             >
-                <DialogTitle className={styles.title} id="draggable-dialog-title">
-                    {title}
-                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText className={styles.title} id="draggable-dialog-title">
+                        {title}
+                    </DialogContentText>
+                </DialogContent>
                 <DialogActions className={styles.btn}>
-                    <YellowButton onClick={handleClose} nameButton={"Нет"}/>
-                    <YellowButton onClick={onAction} nameButton={"Да"}/>
+                    <div><OrangeButton text={"Yes"} onClick={(e) => onConsent(e)}/></div>
+                    <div><OrangeButton text={"No"} onClick={handleClose}/></div>
                 </DialogActions>
             </Dialog>
         </div>

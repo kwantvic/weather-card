@@ -1,52 +1,40 @@
-import React from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import React from "react";
 import {useDispatch} from "react-redux";
-import HomeIcon from '@mui/icons-material/Home';
-import {Alert, CircularProgress} from "@mui/material";
 
-import styles from './ItemsFind.module.scss';
-import {CardCity} from "../../uiComponents/CardCity";
-import {CityState, fetchGetCity, resetFind} from "../../../redux/getCitySlice";
-import {useFindCitySelector, useLoadingFindSelector} from "../../../redux/selectors";
-import {YellowButton} from "../../uiComponents/OrangeButton";
-import {addFav} from "../../../redux/favCitySlice";
+import styles from "../ItemsCard.module.scss";
+import {CardCity} from "../CardCity";
+import {
+    useFavIdSelector, useFavSelector,
+    useLoadingFavSelector,
+} from "../../../redux/selectors";
+import {CardCityPreloader} from "../CardCity/CardCityPreloader";
+import Alert from "@mui/material/Alert";
+import {CityStateModel} from "../../../models/redux/findCity";
+import {fetchFavCity} from "../../../redux/favCitySlice";
 
-export const FindLocation: React.FC = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate();
-    const {location} = useParams();
-    const city = useFindCitySelector();
-    const loadingFind = useLoadingFindSelector();
+export const ItemsFavorite: React.FC = React.memo(() => {
+    const fav = useFavSelector();
+    const favById = useFavIdSelector();
+    const loadingFav = useLoadingFavSelector();
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
-        if (localStorage.getItem("arrFavCity")) {
-            let arr: number[] = JSON.parse(localStorage.getItem("arrFavCity")!);
-            (arr.length > 0) && dispatch(addFav(arr));
-        } else {
-            let arr: number[] = [];
-            localStorage.setItem("arrFavCity", JSON.stringify(arr));
+        if (favById.length && !fav.length) {
+            dispatch(fetchFavCity(favById.join()));
         }
-    }, [dispatch])
-
-    React.useEffect(() => {
-        location && dispatch(fetchGetCity(location))
-    }, [location, dispatch]);
-
-    function toMain() {
-        dispatch(resetFind());
-        navigate("/");
-    }
+    }, [favById, fav, dispatch]);
 
     return (
         <div className={styles.wrapper}>
-            {loadingFind === 1 && <CircularProgress className={styles.progress} color="secondary"/>}
-            {city.length
-                ? (loadingFind === 2) && city.map((obj: CityState) => {
-                        return <CardCity key={obj.id} city={obj}/>
-                    })
-                : (loadingFind === 2 || loadingFind === 3) && <Alert className={styles.alert} severity="error">Location not found</Alert>
-            }
-            <YellowButton text={"Return to homepage"} icon={<HomeIcon/>} onClick={toMain}/>
+            {(fav && (loadingFav === 0 || loadingFav === 2)) && fav.map((obj: CityStateModel) => {
+                return <CardCity data-testid="city-card" key={obj.id} city={obj}/>
+            })}
+            {(fav && loadingFav === 1) && Array.from(favById).map((_, i) => {
+                return <CardCityPreloader data-testid="city-preload" key={i}/>
+            })}
+            {(fav && loadingFav === 3) && <Alert severity="error">Something went wrong 😏</Alert>}
+            {!favById.length &&
+                <Alert severity="info">Here you can add a card with the current weather of your city 😉</Alert>}
         </div>
     );
-}
+})

@@ -1,41 +1,25 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 
 import {weatherApi} from "../api";
-import {LoadingStatus} from "../modules/loadingStatus";
-
-export interface CityState {
-    id: number,
-    name: string,
-    country: string,
-    temp: number,
-    weathIcon: string,
-    weathDescr: string
-}
-
-interface GetCityState {
-    errorDescription: string,
-    loading: LoadingStatus,
-    findCity: CityState[],
-    searchValue: string
-}
+import {CityStateModel, FindCityStateModel} from "../models/redux/findCity";
+import {mapLocationToCityState} from "../utils/functional";
 
 export const fetchGetCity = createAsyncThunk(
-    "getCity/findCity",
+    "findCity/findLocation",
     async (location: string) => (
-        await weatherApi.getLocation(location)
+        await weatherApi.findLocation(location)
             .then((resp) => {
-                let arrLocation = [] as CityState[];
-                resp.list.forEach((obj: any) => {
-                    arrLocation.push({
-                        id: obj.id,
-                        name: obj.name,
-                        country: obj.sys.country,
-                        temp: obj.main.temp,
-                        weathIcon: obj.weather[0].icon,
-                        weathDescr: obj.weather[0].description
-                    });
-                })
-                return arrLocation;
+                return resp.map(mapLocationToCityState);
+            })
+    )
+);
+
+export const fetchGetCityById = createAsyncThunk(
+    "findCity/findCityById",
+    async (id: number) => (
+        await weatherApi.getCityById(id)
+            .then((resp) => {
+                return mapLocationToCityState(resp);
             })
     )
 );
@@ -43,12 +27,13 @@ export const fetchGetCity = createAsyncThunk(
 const initialState = {
     errorDescription: "",
     loading: 0,
-    findCity: [] as CityState[],
-    searchValue: ""
-} as GetCityState;
+    findCity: [] as CityStateModel[],
+    searchValue: "",
+    nameCity: ""
+} as FindCityStateModel;
 
-const getCitySlice = createSlice({
-    name: 'getCity',
+const findCitySlice = createSlice({
+    name: "getCity",
     initialState,
     reducers: {
         setError(state, {payload}) {
@@ -60,9 +45,11 @@ const getCitySlice = createSlice({
         changeSearchValue(state, {payload}) {
             state.searchValue = payload;
         },
+        changeNameCity(state, {payload}) {
+            state.nameCity = payload;
+        },
         resetFind(state) {
             state.searchValue = "";
-            state.findCity = [];
             state.loading = 0;
         }
     },
@@ -78,9 +65,21 @@ const getCitySlice = createSlice({
             state.errorDescription = action.error.message ? action.error.message : "Error loading data.";
             state.findCity = [];
             state.loading = 3;
+        },
+        [fetchGetCityById.pending.type]: (state) => {
+            state.loading = 1;
+        },
+        [fetchGetCityById.fulfilled.type]: (state, {payload}) => {
+            state.findCity = [payload];
+            state.loading = 2;
+        },
+        [fetchGetCityById.rejected.type]: (state, action) => {
+            state.errorDescription = action.error.message ? action.error.message : "Error loading data.";
+            state.findCity = [];
+            state.loading = 3;
         }
     }
 });
 
-export const {setError, resetError, changeSearchValue, resetFind} = getCitySlice.actions;
-export default getCitySlice.reducer;
+export const {setError, resetError, changeSearchValue, resetFind, changeNameCity} = findCitySlice.actions;
+export default findCitySlice.reducer;

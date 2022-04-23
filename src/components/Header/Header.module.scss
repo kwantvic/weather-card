@@ -1,0 +1,84 @@
+@import "src/scss/mixins";
+@import "src/scss/variables";
+
+.wrapper {
+  width: 100vw;
+
+  .header {
+    height: 70px;
+    background-color: #48484a;
+    display: flex;
+    align-items: center;
+    padding-left: rem(30);
+
+    .icon {
+      transform: scale(1.8);
+      margin: 0 10px;
+    }
+
+    span {
+      color: white;
+      font-size: rem(30);
+      cursor: pointer;
+    }
+  }
+
+  .search {
+    background-color: $orange;
+    height: 70px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .form {
+      display: flex;
+
+      .input, .btn {
+        height: 45px;
+      }
+
+      input {
+        font-size: rem(18);
+        width: 250px;
+        padding: 12px 24px;
+        border-radius: 45px 0 0 45px;
+        border: 0 none;
+        box-shadow: none;
+      }
+
+      .btn {
+        padding-left: 10px;
+        padding-right: 15px;
+      }
+
+      .btnColor {
+        background-color: $orangeBtn;
+        border-color: $orangeBtnBorder;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        border-radius: 0 45px 45px 0;
+        color: white;
+        border: 1px solid transparent;
+        font-size: rem(14);
+        cursor: pointer;
+
+        .iconSearch {
+          transform: scale(0.8);
+        }
+
+        &:hover {
+          background-color: #9e6c6c;
+          transition: background-color .5s;
+        }
+
+        &:active {
+          background-color: #ead1d1;
+        }
+      }
+    }
+  }
+}
