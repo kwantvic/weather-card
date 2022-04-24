@@ -60,14 +60,14 @@ export const CardCity: React.FC<CardCityProps> = React.memo(({city}) => {
     }
 
     return (
-        <div data-testid="card-city" className={styles.wrapper}>
+        <div data-testid="city-card" className={styles.wrapper}>
             {(useLoadingUpdateSelector() === 1 && updateCityId === city.id) &&
                 <div className={styles.wrapperProgress}>
                     <CircularProgress className={styles.progress}/>
                 </div>}
-            <Card
-                className={(useLoadingUpdateSelector() === 1 && updateCityId === city.id) ? `${styles.wrapperCard} ${styles.load}` : `${styles.wrapperCard}`}
-                onClick={clickCard}>
+            <Card data-testid="card"
+                  className={(useLoadingUpdateSelector() === 1 && updateCityId === city.id) ? `${styles.wrapperCard} ${styles.load}` : `${styles.wrapperCard}`}
+                  onClick={clickCard}>
                 <CardActionArea>
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
@@ -82,20 +82,20 @@ export const CardCity: React.FC<CardCityProps> = React.memo(({city}) => {
                         </Typography>
                         <div className={styles.icons}>
                             {!favById.includes(city.id) &&
-                                <div onClick={onAddFav} className={styles.icon}>
+                                <div data-testid="icon-addFav" onClick={onAddFav} className={styles.icon}>
                                     <ToolTip text={"Bookmark it"} icon={<FavoriteBorderIcon/>}/>
                                 </div>
                             }
                             {favById.includes(city.id) &&
                                 <DraggableDialog title={"Do you really want to remove a city card from a favorites?"}
                                                  onAction={onDelFav} component={
-                                    <div className={styles.icon}>
+                                    <div data-testid="icon-delFav" className={styles.icon}>
                                         <ToolTip text={"Remove"} icon={<FavoriteIcon/>}/>
                                     </div>}
                                 />
                             }
                             {!isFindPath &&
-                                <div onClick={updateCity} className={styles.icon}>
+                                <div data-testid="icon-update" onClick={updateCity} className={styles.icon}>
                                     <ToolTip text={"Update the data"} icon={<CachedIcon/>}/>
                                 </div>}
                         </div>

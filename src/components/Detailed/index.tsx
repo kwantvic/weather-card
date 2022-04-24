@@ -42,7 +42,7 @@ export const Detailed: React.FC = React.memo(() => {
     }
 
     return (
-        <div className={styles.wrapper}>
+        <div data-testid="detailed-page" className={styles.wrapper}>
             {(loadingDetail === 1 || loadingFind === 1) && <CircularProgress className={styles.progress} color="secondary"/>}
             {(city && loadingDetail === 2)
                 ? <div className={styles.infoWrapper}>

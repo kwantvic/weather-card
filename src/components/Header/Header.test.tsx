@@ -29,7 +29,7 @@ describe("HEADER", () => {
         });
     });
 
-    it("onClick toFind", () => {
+    it("onClick to find", () => {
         render(<MemoryRouter><Provider store={store}><Header/></Provider></MemoryRouter>);
         const input = screen.getByRole("textbox")  as HTMLInputElement;
         userEvent.type(input, "london");

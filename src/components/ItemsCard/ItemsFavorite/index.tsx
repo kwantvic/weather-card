@@ -27,10 +27,10 @@ export const ItemsFavorite: React.FC = React.memo(() => {
     return (
         <div className={styles.wrapper}>
             {(fav && (loadingFav === 0 || loadingFav === 2)) && fav.map((obj: CityStateModel) => {
-                return <CardCity data-testid="city-card" key={obj.id} city={obj}/>
+                return <CardCity key={obj.id} city={obj}/>
             })}
             {(fav && loadingFav === 1) && Array.from(favById).map((_, i) => {
-                return <CardCityPreloader data-testid="city-preload" key={i}/>
+                return <CardCityPreloader key={i}/>
             })}
             {(fav && loadingFav === 3) && <Alert severity="error">Something went wrong 😏</Alert>}
             {!favById.length &&

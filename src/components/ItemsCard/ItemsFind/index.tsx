@@ -12,7 +12,7 @@ import {OrangeButton} from "../../UiComponents/OrangeButton";
 import {CityStateModel} from "../../../models/redux/findCity";
 
 export const ItemsFind: React.FC = React.memo(() => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const {location} = useParams();
     const city = useFindCitySelector();

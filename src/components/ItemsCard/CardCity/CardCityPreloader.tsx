@@ -5,7 +5,7 @@ import styles from './CardCity.module.scss';
 
 export const CardCityPreloader: React.FC = React.memo(() => {
     return (
-        <div className={styles.wrapper}>
+        <div data-testid="city-preload" className={styles.wrapper}>
             <Card className={styles.wrapperCard}>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
