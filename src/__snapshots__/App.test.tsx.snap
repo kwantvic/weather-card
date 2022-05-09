@@ -8,6 +8,7 @@ Object {
       <div>
         <div
           class="wrapper false"
+          data-testid="error-alert"
         >
           <div
             class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-standardError MuiAlert-standard css-xilmwd-MuiPaper-root-MuiAlert-root"
@@ -131,6 +132,7 @@ Object {
     <div>
       <div
         class="wrapper false"
+        data-testid="error-alert"
       >
         <div
           class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-standardError MuiAlert-standard css-xilmwd-MuiPaper-root-MuiAlert-root"

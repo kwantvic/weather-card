@@ -19,12 +19,12 @@ export const ActionAlerts: React.FC<ActionAlertsProps> = React.memo(({severity, 
             setIsError(true);
             setTimeout(() => {
                 setIsError(false);
-                dispatch((resetError("")));
+                dispatch((resetError()));
             }, 3333)
         }
     }, [errorDescription, dispatch])
     return (
-        <div className={`${styles.wrapper} ${isError && styles.wrapper__visibly}`}>
+        <div data-testid="error-alert" className={`${styles.wrapper} ${isError && styles.wrapper__visibly}`}>
             <Alert severity={severity}>
                 <AlertTitle className={styles.error} style={{textTransform: "capitalize"}}>{severity}</AlertTitle>
                 <span>{errorDescription} 🥺</span>

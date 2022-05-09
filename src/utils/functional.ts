@@ -1,16 +1,18 @@
 import {favorites} from "./variables";
 import {FindLocationModel} from "../models/api/findLocation";
 import {DetailedLocationModel} from "../models/api/detailedLocation";
+import {AxiosError} from "axios";
+import {ServerError} from "../models/redux/findCity";
 
-export function getLocalFav() {
+function getLocalFav() {
     return localStorage.getItem(favorites);
 }
 
-export function setLocalFav(arr: number[]) {
+function setLocalFav(arr: number[]) {
     return localStorage.setItem(favorites, JSON.stringify(arr));
 }
 
-export function toTextualDescription(degree: number) {
+function toTextualDescription(degree: number) {
     const sectors = ["Northerly", "North-Easterly", "Easterly", "South-Easterly", "Southerly", "South-Westerly", "Westerly", "North-Westerly"];
     degree += 22.5;
     (degree < 0) ? degree = 360 - Math.abs(degree) % 360 : degree = degree % 360;
@@ -18,7 +20,7 @@ export function toTextualDescription(degree: number) {
     return sectors[which];
 }
 
-export function mapLocationToCityState(obj: FindLocationModel) {
+function mapLocationToCityState(obj: FindLocationModel) {
     return {
         id: obj.id,
         name: obj.name,
@@ -31,7 +33,7 @@ export function mapLocationToCityState(obj: FindLocationModel) {
     };
 }
 
-export function mapDetailsToDetailedState(obj: DetailedLocationModel) {
+function mapDetailsToDetailedState(obj: DetailedLocationModel) {
     return {
         hourlyTemp: obj.hourly.slice(0, 12).map(({temp}: { temp: number }) => Math.round(temp)),
         details: {
@@ -48,3 +50,10 @@ export function mapDetailsToDetailedState(obj: DetailedLocationModel) {
         }
     };
 }
+
+function getError(err: any) {
+    let error: AxiosError<ServerError> = err;
+    return error.response?.data ?? {message: "Error loading data"}
+}
+
+export {getLocalFav, setLocalFav, toTextualDescription, mapLocationToCityState, mapDetailsToDetailedState, getError};

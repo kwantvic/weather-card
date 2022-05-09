@@ -18,3 +18,8 @@ export interface FindCityStateModel {
     searchValue: string
     nameCity: string
 }
+
+export interface ServerError {
+    cod?: number,
+    message: string
+}

@@ -1,26 +1,25 @@
 import React from "react";
 import {Routes, Route} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 
 import {Header} from "./components/Header";
 import {ItemsFind} from "./components/ItemsCard/ItemsFind";
 import {ActionAlerts} from "./components/UiComponents/ActionAlerts";
-import {errorDescriptionSelector} from "./redux/selectors";
+import {useErrorSelector} from "./redux/selectors";
 import {ItemsFavorite} from "./components/ItemsCard/ItemsFavorite";
 import {Detailed} from "./components/Detailed";
 import {getLocalFav, setLocalFav} from "./utils/functional";
 import {addLocalFav} from "./redux/favCitySlice";
 import {NotFound} from "./components/NotFound";
-import {RootState} from "./redux";
 
 export const App: React.FC = React.memo(() => {
     const dispatch = useDispatch();
-    const errorSelector = useSelector((state: RootState) => errorDescriptionSelector(state));
+    const errorSelector = useErrorSelector();
 
     React.useEffect(() => {
         if (getLocalFav()) {
             let arr: number[] = JSON.parse(getLocalFav()!);
-            if (arr.length > 0) {
+            if (arr.length > 0)  {
                 dispatch(addLocalFav(arr));
             }
         } else {
